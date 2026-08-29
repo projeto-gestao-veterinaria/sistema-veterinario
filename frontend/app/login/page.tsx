@@ -1,5 +1,6 @@
 "use client";
 
+import SignInWithGoogle from "@/components/buttons/SignInWithGoogle";
 import Image from "next/image";
 import { useState } from "react";
 
@@ -13,17 +14,7 @@ export default function Login() {
           <h1 className="text-3xl font-bold text-gray-900 mb-6">Sign in</h1>
 
           <div className="flex gap-3 mb-4">
-            <button className="w-10 h-10 rounded-full border border-gray-200 flex items-center justify-center text-sm font-medium hover:bg-gray-100">
-              f
-            </button>
-
-            <button className="w-10 h-10 rounded-full border border-gray-200 flex items-center justify-center text-sm font-medium hover:bg-gray-100">
-              G+
-            </button>
-
-            <button className="w-10 h-10 rounded-full border border-gray-200 flex items-center justify-center text-sm font-medium hover:bg-gray-100">
-              in
-            </button>
+            <SignInWithGoogle />
           </div>
 
           <p className="text-xs text-gray-500 mb-4">ou use sua conta</p>
