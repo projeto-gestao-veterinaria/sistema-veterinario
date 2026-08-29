@@ -1,1 +1,76 @@
 @import "tailwindcss";
+
+@theme {
+  /* =========================
+     COLORS
+     ========================= */
+  /* Cores Primárias */
+  --color-deep-teal: #042f2e; /*Texto / Ícones*/
+  --color-teal: #0d9488; /*Ação Primária*/
+  --color-light-teal: #14b8a6; /*Destaque / CTAs */
+  --color-mint: #5eead4; /*Sucessos / Tags*/
+  --color-pale-mint: #ccfbf1; /*Fundo de Alerta*/
+
+  /* Cores Neutras */
+  --color-white: #ffffff; /*Cards / Inputs*/
+  --color-page: #f8fafc; /*Fundo Página*/
+  --color-surface: #f1f5f9; /*Fundo de Seção*/
+  --color-border: #e2e8f0; /*Bordas*/
+  --color-slate: #94a3b8; /*Subtítulos*/
+  --color-light-gray: #64748b; /*Placeholders*/
+  --color-medium-gray: #334155; /*Bordas / Linhas*/
+  --color-dark-gray: #1e293b; /*Texto Secundário*/
+  --color-dark-navy: #0f172a; /*Texto Escuro / Sidebar*/
+  --color-light-slate: #cbd5e1; /*Divisórias*/
+
+  /* Cores de Destaque (Laranja)*/
+  --color-deep-orange: #993f0d;
+  --color-orange: #f58521;
+  --color-orange-light: #faa64d;
+  --color-peach: #ffd18c;
+  --color-pale-peach: #ffedd1;
+  --color-light-peach: #fff7eb;
+
+  /* Cores Semânticas */
+  --color-success-green: #22c55e; /*Confirmações e status positivo*/
+  --color-error-red: #ef4444; /*Exclusões e avisos*/
+  --color-warning-amber: #f59e0b; /*Pendências e ações intermediárias*/
+  --color-info-blue: #3b82f6; /*Dicas e avisos informativos*/
+
+  /* =========================
+     GRADIENTS
+     ========================= */
+
+  --background-image-primary-green-gradient: linear-gradient(
+    90deg,
+    var(--color-deep-teal) 0%,
+    var(--color-teal) 100%
+  );
+
+  --background-image-secondary-green-gradient: linear-gradient(
+    90deg,
+    var(--color-teal) 0%,
+    var(--color-mint) 100%
+  );
+
+  --background-image-primary-orange-gradient: linear-gradient(
+    90deg,
+    #f58521 0%,
+    #fab859 100%
+  );
+  /* =========================
+     TYPOGRAPHY
+     ========================= */
+  /* fontes */
+  --font-inter: var(--font-inter);
+  --font-outfit: var(--font-outfit);
+  /* Tamanhos */
+  --text-display: 40px;
+  --text-body: 16px;
+  --text-h1: 32px;
+  --text-h2: 24px;
+  --text-h3: 20px;
+  --text-h4: 16px;
+  --text-small: 14px;
+  --text-caption: 12px;
+}
