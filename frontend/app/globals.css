@@ -62,8 +62,8 @@
      TYPOGRAPHY
      ========================= */
   /* fontes */
-  --font-inter: var(--font-inter);
-  --font-outfit: var(--font-outfit);
+  --font-inter: var(--next-font-inter);
+  --font-outfit: var(--next-font-outfit);
   /* Tamanhos */
   --text-display: 40px;
   --text-body: 16px;

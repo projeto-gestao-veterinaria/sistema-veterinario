@@ -3,12 +3,12 @@ import { Inter, Outfit } from "next/font/google";
 import "./globals.css";
 
 const inter = Inter({
-  variable: "--font-inter",
+  variable: "--next-font-inter",
   subsets: ["latin"],
 });
 
 const outfit = Outfit({
-  variable: "--font-outfit",
+  variable: "--next-font-outfit",
   subsets: ["latin"],
 });
 
@@ -21,7 +21,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
       lang="pt-BR"
-      className={`$${inter.variable} ${outfit.variable} h-full`}
+      className={`${inter.variable} ${outfit.variable} h-full`}
     >
       <body className="">{children}</body>
     </html>
