@@ -14,7 +14,12 @@ const items = [
   { label: "Vacinas", route: "/vacinas", icon: Syringe },
 ];
 
-export default function Sidebar() {
+interface SidebarProps {
+  name: string | null | undefined;
+  image: string | null | undefined;
+}
+
+export default function Sidebar({ name, image }: SidebarProps) {
   const pathname = usePathname();
 
   return (
@@ -60,6 +65,22 @@ export default function Sidebar() {
             );
           })}
         </ul>
+      </div>
+
+      <div className="mt-auto flex gap-2 border-t pt-6 border-border">
+        <div className="w-10 h-10 rounded-full border-border flex justify-center items-center bg-surface">
+          <Image
+            src={image ?? "/assets/user.svg"}
+            alt="Foto do usuário"
+            width={34}
+            height={34}
+            className=""
+          />
+        </div>
+        <div>
+          <h2>{name}</h2>
+          <p>CRM</p>
+        </div>
       </div>
     </nav>
   );
