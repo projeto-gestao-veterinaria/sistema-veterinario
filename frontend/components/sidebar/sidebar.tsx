@@ -5,6 +5,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
+import UserAvatar from "../user/UserAvatar";
+
 const items = [
   { label: "Dashboard", route: "/dashboard", icon: House },
   { label: "Tutores", route: "/tutores", icon: Users },
@@ -16,14 +18,14 @@ const items = [
 
 interface SidebarProps {
   name: string | null | undefined;
-  image: string | null | undefined;
+  image?: string | null;
 }
 
 export default function Sidebar({ name, image }: SidebarProps) {
   const pathname = usePathname();
 
   return (
-    <nav className="fixed flex flex-col py-6 px-4 w-65 h-full rounded-r-2xl border border-border">
+    <nav className="fixed bg-linear-to-r from-white to-page flex flex-col py-6 px-4 w-65 h-full rounded-r-2xl border border-border">
       <div className="flex items-center border-b border-border h-16 mb-6">
         <Image
           alt="logo"
@@ -68,15 +70,7 @@ export default function Sidebar({ name, image }: SidebarProps) {
       </div>
 
       <div className="mt-auto flex gap-2 border-t pt-6 border-border">
-        <div className="w-10 h-10 rounded-full border-border flex justify-center items-center bg-surface">
-          <Image
-            src={image ?? "/assets/user.svg"}
-            alt="Foto do usuário"
-            width={34}
-            height={34}
-            className=""
-          />
-        </div>
+        <UserAvatar name={name} image={image} />
         <div>
           <h2>{name}</h2>
           <p>CRM</p>
