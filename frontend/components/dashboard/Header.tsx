@@ -31,6 +31,12 @@ const headerContent: Record<string, HeaderContent> = {
     placeholder: "Buscar tutores, CPF, e-mail...",
   },
 
+  "/tutores/novo": {
+    title: "Cadastro de Tutores",
+    description: "Informações dos proprietários de pets",
+    placeholder: "Buscar tutores, CPF, e-mail...",
+  },
+
   "/animais": {
     title: "Cadastro de Animais",
     description: "Pacientes, tutores e histórico clínico",
