@@ -43,6 +43,12 @@ const headerContent: Record<string, HeaderContent> = {
     placeholder: "Buscar pacientes, tutores, prontuários...",
   },
 
+  "/animais/novo": {
+    title: "Cadastro de Animais",
+    description: "Pacientes, tutores e histórico clínico",
+    placeholder: "Buscar pacientes, tutores, prontuários...",
+  },
+
   "/agendamento": {
     title: "Agendamento de Consultas",
     description: "Horários e atendimentos semanais",
