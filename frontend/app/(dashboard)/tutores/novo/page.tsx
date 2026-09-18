@@ -29,6 +29,14 @@ function formatCep(value: string) {
     .replace(/(\d{5})(\d)/, "$1-$2");
 }
 
+function formatTelefone(value: string) {
+  return value
+    .replace(/\D/g, "")
+    .slice(0, 11)
+    .replace(/^(\d{2})(\d)/, "($1) $2")
+    .replace(/(\d)(\d{4})$/, "$1-$2");
+}
+
 const inputClassName =
   "h-12 w-full rounded-xl border border-border bg-white px-4 font-inter text-small text-dark-gray outline-none transition placeholder:text-slate focus:border-teal focus:ring-2 focus:ring-teal/20";
 
@@ -40,6 +48,8 @@ export default function NovoTutor() {
 
   const [nome, setNome] = useState("");
   const [cpf, setCpf] = useState("");
+  const [telefone, setTelefone] = useState("");
+  const [email, setEmail] = useState("");
   const [cep, setCep] = useState("");
   const [rua, setRua] = useState("");
   const [bairro, setBairro] = useState("");
@@ -170,6 +180,41 @@ export default function NovoTutor() {
               onChange={(event) => setDataNascimento(event.target.value)}
               className={inputClassName}
             />
+          </div>
+
+          <div className="grid grid-cols-2 gap-4">
+            <div className="flex flex-col gap-1.5">
+              <label htmlFor="telefone" className={labelClassName}>
+                Telefone
+              </label>
+
+              <input
+                id="telefone"
+                type="text"
+                required
+                inputMode="numeric"
+                value={telefone}
+                onChange={(event) => setTelefone(formatTelefone(event.target.value))}
+                placeholder="(00) 00000-0000"
+                className={inputClassName}
+              />
+            </div>
+
+            <div className="flex flex-col gap-1.5">
+              <label htmlFor="email" className={labelClassName}>
+                E-mail
+              </label>
+
+              <input
+                id="email"
+                type="email"
+                required
+                value={email}
+                onChange={(event) => setEmail(event.target.value)}
+                placeholder="Ex.: carlos@email.com"
+                className={inputClassName}
+              />
+            </div>
           </div>
 
           <div className="flex flex-col gap-1.5">
