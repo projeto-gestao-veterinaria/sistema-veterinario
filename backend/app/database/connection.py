@@ -14,7 +14,7 @@ class Base(DeclarativeBase):
     pass
 
 
-# O engine só é criado quando DATABASE_URL estiver configurada.
+
 engine = create_engine(DATABASE_URL) if DATABASE_URL else None
 
 SessionLocal = (

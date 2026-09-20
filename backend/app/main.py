@@ -1,11 +1,13 @@
 from fastapi import FastAPI
 from app.routes.tutor import router as tutor_router
+from app.routes.animal import router as animal_router
 
 app = FastAPI(
     title="PetAssistente API",
     description="Backend do Sistema de Gestão Veterinária",
     version="0.1.0",
 )
+app.include_router(animal_router)
 
 app.include_router(tutor_router)
 

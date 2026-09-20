@@ -13,6 +13,13 @@ class AnimalBase(BaseModel):
 class AnimalCreate(AnimalBase):
     tutor_id: int
 
+class AnimalUpdate(BaseModel):
+    nome: str | None = None
+    especie: str | None = None
+    raca: str | None = None
+    data_nascimento: date | None = None
+    tutor_id: int | None = None
+
 
 class AnimalResponse(AnimalBase):
     id: int

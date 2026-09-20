@@ -8,3 +8,4 @@ pydantic[email]
 python-dotenv
 pytest
 httpx
+httpx2
