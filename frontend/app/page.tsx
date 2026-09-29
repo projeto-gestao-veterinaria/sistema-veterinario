@@ -1,11 +1,11 @@
-import SearchBar from "@/components/search/SearchBar";
-import Link from "next/link";
+import Header from "@/components/home/Header";
+import Main from "@/components/home/Main";
 
 export default function Home() {
   return (
-    <div>
-      <Link href="/login">LOGIN</Link>
-      <SearchBar placeholder="Teste" />
+    <div className="min-h-screen">
+      <Header />
+      <Main />
     </div>
   );
 }

@@ -9,7 +9,7 @@ export default function Login() {
 
   return (
     <main className="min-h-screen flex items-center justify-center bg-gray-100">
-      <div className="relative w-[900px] h-[550px] overflow-hidden rounded-xl shadow-xl bg-white">
+      <div className="relative w-225 h-137.5 overflow-hidden rounded-xl shadow-xl bg-white">
         <section className="absolute left-0 top-0 w-1/2 h-full flex flex-col items-center justify-center px-16">
           <h1 className="text-3xl font-bold text-gray-900 mb-6">Sign in</h1>
 
@@ -41,7 +41,7 @@ export default function Login() {
 
             <button
               type="submit"
-              className="self-center mt-2 px-10 py-3 rounded-full bg-gradient-to-r bg-primary-orange-gradient text-white text-xs font-bold uppercase tracking-wide hover:opacity-90 transition"
+              className="self-center mt-2 px-10 py-3 rounded-full bg-linear-to-r bg-primary-orange-gradient text-white text-xs font-bold uppercase tracking-wide hover:opacity-90 transition"
             >
               Entrar
             </button>
@@ -78,7 +78,7 @@ export default function Login() {
 
             <button
               type="submit"
-              className="self-center mt-2 px-10 py-3 rounded-full bg-gradient-to-r bg-primary-orange-gradient text-white text-xs font-bold uppercase tracking-wide hover:opacity-90 transition"
+              className="self-center mt-2 px-10 py-3 rounded-full bg-linear-to-r bg-primary-orange-gradient text-white text-xs font-bold uppercase tracking-wide hover:opacity-90 transition"
             >
               Criar conta
             </button>

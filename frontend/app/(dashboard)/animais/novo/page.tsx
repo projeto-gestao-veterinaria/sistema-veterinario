@@ -41,7 +41,7 @@ export default function NovoAnimal() {
 
   const [nome, setNome] = useState("");
   const [especie, setEspecie] = useState("");
-  const [idade, setIdade] = useState("");
+  const [dataNascimento, setDataNascimento] = useState("");
   const [sexo, setSexo] = useState("");
   const [castrado, setCastrado] = useState("");
   const [raca, setRaca] = useState("");
@@ -348,26 +348,18 @@ export default function NovoAnimal() {
 
           <div className="grid grid-cols-3 gap-4">
             <div className="flex flex-col gap-1.5">
-              <label htmlFor="idade" className={labelClassName}>
-                Idade
+              <label htmlFor="dataNascimento" className={labelClassName}>
+                Data de Nascimento
               </label>
 
-              <div className="relative">
-                <input
-                  id="idade"
-                  type="number"
-                  required
-                  min={0}
-                  value={idade}
-                  onChange={(event) => setIdade(event.target.value)}
-                  placeholder="Ex.: 3"
-                  className={`${inputClassName} pr-14`}
-                />
-
-                <span className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 font-inter text-small text-light-gray">
-                  anos
-                </span>
-              </div>
+              <input
+                id="dataNascimento"
+                type="date"
+                required
+                value={dataNascimento}
+                onChange={(event) => setDataNascimento(event.target.value)}
+                className={inputClassName}
+              />
             </div>
 
             <div className="flex flex-col gap-1.5">
