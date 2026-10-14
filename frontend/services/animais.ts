@@ -6,6 +6,9 @@ export interface AnimalBase {
   especie: string;
   raca?: string | null;
   data_nascimento?: string | null;
+  sexo: string;
+  castrado: string;
+  cor_pelagem: string;
 }
 
 export interface AnimalCreate extends AnimalBase {
@@ -18,6 +21,9 @@ export interface AnimalUpdate {
   raca?: string | null;
   data_nascimento?: string | null;
   tutor_id?: number;
+  sexo?: string;
+  castrado?: string;
+  cor_pelagem?: string;
 }
 
 export interface AnimalResponse extends AnimalBase {
@@ -25,6 +31,7 @@ export interface AnimalResponse extends AnimalBase {
   tutor_id: number;
   raca: string | null;
   data_nascimento: string | null;
+  criado_em?: string | null;
 }
 
 export async function handleResponse<T>(response: Response): Promise<T> {

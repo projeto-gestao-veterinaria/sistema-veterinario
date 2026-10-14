@@ -8,6 +8,8 @@ from app.main import app
 from app.database.connection import Base, get_db
 
 from app import models
+from app.data.catalogo_vacinas import CATALOGO_VACINAS
+from app.models.catalogo_vacina import CatalogoVacina
 
 
 SQLALCHEMY_DATABASE_URL = "sqlite:///:memory:"
@@ -29,6 +31,14 @@ TestingSessionLocal = sessionmaker(
 def db_session():
     # Cria todas as tabelas no banco de teste
     Base.metadata.create_all(bind=engine)
+
+    # Semeia o catálogo de vacinas
+    seed_session = TestingSessionLocal()
+    seed_session.add_all(
+        [CatalogoVacina(**item) for item in CATALOGO_VACINAS]
+    )
+    seed_session.commit()
+    seed_session.close()
 
     session = TestingSessionLocal()
 

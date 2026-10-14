@@ -1,56 +1,12 @@
-interface Vaccine {
-  nome: string;
-  dose: string;
-  dataAplicacao: string;
-  proximaDose: string;
-  veterinario: string;
-  status: "Aplicada" | "Pendente" | "Atrasada";
+import type { VacinaResponse } from "@/services/vacinas";
+
+interface VaccinesTableProps {
+  vacinas: VacinaResponse[];
+  loading?: boolean;
+  error?: string | null;
 }
 
-const vacinas: Vaccine[] = [
-  {
-    nome: "Antirrábica",
-    dose: "Anual",
-    dataAplicacao: "03/06/2026",
-    proximaDose: "03/06/2027",
-    veterinario: "Dr. Felipe Castro",
-    status: "Aplicada",
-  },
-  {
-    nome: "Múltipla Canina V10",
-    dose: "Anual",
-    dataAplicacao: "15/05/2026",
-    proximaDose: "15/05/2027",
-    veterinario: "Dra. Carolina Mendes",
-    status: "Aplicada",
-  },
-  {
-    nome: "Gripe (Traqueobronquite)",
-    dose: "Anual",
-    dataAplicacao: "03/04/2026",
-    proximaDose: "03/04/2027",
-    veterinario: "Dra. Carolina Mendes",
-    status: "Aplicada",
-  },
-  {
-    nome: "Giárdia Canina",
-    dose: "Anual",
-    dataAplicacao: "14/07/2025",
-    proximaDose: "14/07/2026",
-    veterinario: "Dr. Felipe Castro",
-    status: "Pendente",
-  },
-  {
-    nome: "Leptospirose",
-    dose: "Anual",
-    dataAplicacao: "15/06/2025",
-    proximaDose: "15/06/2026",
-    veterinario: "Dra. Carolina Mendes",
-    status: "Atrasada",
-  },
-];
-
-function getStatusStyle(status: Vaccine["status"]) {
+function getStatusStyle(status: string) {
   switch (status) {
     case "Aplicada":
       return "bg-teal-100 text-emerald-500";
@@ -60,10 +16,13 @@ function getStatusStyle(status: Vaccine["status"]) {
 
     case "Atrasada":
       return "bg-red-100 text-red-500";
+
+    default:
+      return "bg-slate-100 text-slate-500";
   }
 }
 
-function getNextDoseStyle(status: Vaccine["status"]) {
+function getNextDoseStyle(status: string) {
   switch (status) {
     case "Pendente":
       return "text-amber-500";
@@ -76,7 +35,19 @@ function getNextDoseStyle(status: Vaccine["status"]) {
   }
 }
 
-export default function VaccinesTable() {
+function formatarData(iso: string | null | undefined): string {
+  if (!iso) return "—";
+
+  const [year, month, day] = iso.split("-");
+
+  return `${day}/${month}/${year}`;
+}
+
+export default function VaccinesTable({
+  vacinas,
+  loading = false,
+  error = null,
+}: VaccinesTableProps) {
   return (
     <div className="box-border flex h-81 w-full flex-col items-start overflow-hidden rounded-2xl border border-slate-200 bg-linear-to-r from-white to-slate-50 shadow-[0_2px_8px_-4px_rgba(0,0,0,0.03),0_12px_28px_-12px_rgba(13,148,135,0.08)]">
       <div className="box-border flex h-12.25 w-full shrink-0 items-start border-b border-slate-200 bg-slate-50 p-4 shadow-[0_2px_12px_-2px_rgba(0,0,0,0.04)]">
@@ -105,46 +76,70 @@ export default function VaccinesTable() {
         </span>
       </div>
 
-      {vacinas.map((vacina) => (
-        <div
-          key={vacina.nome}
-          className="box-border flex h-13.75 w-full shrink-0 items-center border-b border-slate-200 px-4"
-        >
-          <span className="w-45 shrink-0 font-['Inter'] text-sm font-semibold leading-4.25 text-slate-800">
-            {vacina.nome}
+      {loading && (
+        <div className="flex h-32 w-full items-center justify-center">
+          <span className="font-inter text-[13px] text-slate-500">
+            Carregando vacinas...
           </span>
+        </div>
+      )}
 
-          <span className="w-25 shrink-0 font-['Inter'] text-sm font-normal leading-4.25 text-slate-500">
-            {vacina.dose}
+      {!loading && error && (
+        <div className="flex h-32 w-full items-center justify-center">
+          <span className="font-inter text-[13px] text-red-500">{error}</span>
+        </div>
+      )}
+
+      {!loading && !error && vacinas.length === 0 && (
+        <div className="flex h-32 w-full items-center justify-center">
+          <span className="font-inter text-[13px] text-slate-500">
+            Nenhuma vacina registrada para este paciente.
           </span>
+        </div>
+      )}
 
-          <span className="w-40 shrink-0 font-['Inter'] text-sm font-normal leading-4.25 text-slate-500">
-            {vacina.dataAplicacao}
-          </span>
-
-          <span
-            className={`w-40 shrink-0 font-['Inter'] text-sm font-semibold leading-4.25 ${getNextDoseStyle(
-              vacina.status,
-            )}`}
+      {!loading &&
+        !error &&
+        vacinas.map((vacina) => (
+          <div
+            key={vacina.id}
+            className="box-border flex h-13.75 w-full shrink-0 items-center border-b border-slate-200 px-4"
           >
-            {vacina.proximaDose}
-          </span>
+            <span className="w-45 shrink-0 font-['Inter'] text-sm font-semibold leading-4.25 text-slate-800">
+              {vacina.nome}
+            </span>
 
-          <span className="w-55 shrink-0 font-['Inter'] text-sm font-normal leading-4.25 text-slate-500">
-            {vacina.veterinario}
-          </span>
+            <span className="w-25 shrink-0 font-['Inter'] text-sm font-normal leading-4.25 text-slate-500">
+              {vacina.dose}
+            </span>
 
-          <div className="flex w-66 flex-1 justify-end">
+            <span className="w-40 shrink-0 font-['Inter'] text-sm font-normal leading-4.25 text-slate-500">
+              {formatarData(vacina.data_aplicacao)}
+            </span>
+
             <span
-              className={`flex h-5.75 items-center rounded-full px-2.5 py-1 font-['Inter'] text-xs font-semibold leading-3.75 ${getStatusStyle(
+              className={`w-40 shrink-0 font-['Inter'] text-sm font-semibold leading-4.25 ${getNextDoseStyle(
                 vacina.status,
               )}`}
             >
-              {vacina.status}
+              {formatarData(vacina.proxima_dose)}
             </span>
+
+            <span className="w-55 shrink-0 font-['Inter'] text-sm font-normal leading-4.25 text-slate-500">
+              {vacina.veterinario}
+            </span>
+
+            <div className="flex w-66 flex-1 justify-end">
+              <span
+                className={`flex h-5.75 items-center rounded-full px-2.5 py-1 font-['Inter'] text-xs font-semibold leading-3.75 ${getStatusStyle(
+                  vacina.status,
+                )}`}
+              >
+                {vacina.status}
+              </span>
+            </div>
           </div>
-        </div>
-      ))}
+        ))}
     </div>
   );
 }

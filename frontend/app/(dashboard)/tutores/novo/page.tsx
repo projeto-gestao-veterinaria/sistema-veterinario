@@ -5,6 +5,8 @@ import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import type { FormEvent } from "react";
 
+import { criarTutor } from "@/services/tutores";
+
 type ViaCepResponse = {
   erro?: boolean | string;
   logradouro?: string;
@@ -58,6 +60,8 @@ export default function NovoTutor() {
   const [dataNascimento, setDataNascimento] = useState("");
   const [loadingCep, setLoadingCep] = useState(false);
   const [cepError, setCepError] = useState<string | null>(null);
+  const [submitting, setSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
 
   const cepRequestRef = useRef<AbortController | null>(null);
 
@@ -115,9 +119,35 @@ export default function NovoTutor() {
     void buscarCep(digits);
   }
 
-  function handleSubmit(event: FormEvent<HTMLFormElement>) {
+  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    router.push("/tutores");
+
+    setSubmitting(true);
+    setSubmitError(null);
+
+    try {
+      await criarTutor({
+        nome,
+        email,
+        telefone,
+        cpf,
+        data_nascimento: dataNascimento,
+        cep,
+        rua,
+        bairro,
+        cidade,
+        estado,
+      });
+
+      router.push("/tutores");
+    } catch (error) {
+      setSubmitError(
+        error instanceof Error
+          ? error.message
+          : "Não foi possível cadastrar o tutor.",
+      );
+      setSubmitting(false);
+    }
   }
 
   return (
@@ -319,6 +349,12 @@ export default function NovoTutor() {
             </div>
           </div>
 
+          {submitError && (
+            <span className="font-inter text-[13px] font-medium text-error-red">
+              {submitError}
+            </span>
+          )}
+
           <div className="flex items-center justify-end gap-3 pt-2">
             <Link
               href="/tutores"
@@ -329,9 +365,10 @@ export default function NovoTutor() {
 
             <button
               type="submit"
-              className="flex h-10 cursor-pointer items-center justify-center rounded-xl bg-linear-to-r from-[#0D9487] to-[#1A806B] px-5 font-inter text-small font-medium text-white shadow-[0px_2px_6px_-2px_rgba(13,148,135,0.14902),0px_10px_24px_-8px_rgba(13,148,135,0.2)] transition hover:opacity-90"
+              disabled={submitting}
+              className="flex h-10 cursor-pointer items-center justify-center rounded-xl bg-linear-to-r from-[#0D9487] to-[#1A806B] px-5 font-inter text-small font-medium text-white shadow-[0px_2px_6px_-2px_rgba(13,148,135,0.14902),0px_10px_24px_-8px_rgba(13,148,135,0.2)] transition hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-60"
             >
-              Cadastrar Tutor
+              {submitting ? "Cadastrando..." : "Cadastrar Tutor"}
             </button>
           </div>
         </form>

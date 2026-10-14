@@ -1,63 +1,38 @@
+"use client";
+
 import {
   Activity,
-  ArrowDownRight,
-  ArrowUpRight,
   Dog,
   Syringe,
   Users,
   type LucideIcon,
 } from "lucide-react";
+import { useEffect, useState } from "react";
+
+import { listarAnimais } from "@/services/animais";
+import { listarAgendamentos } from "@/services/agendamentos";
+import { listarTutores } from "@/services/tutores";
+import { listarVacinas } from "@/services/vacinas";
 
 type KpiColor = "teal" | "orange";
 
 type Kpi = {
   title: string;
   value: string;
-  trend: string;
-  direction: "up" | "down";
+  subtitle: string;
   icon: LucideIcon;
   color: KpiColor;
   iconColor: KpiColor;
 };
 
-const kpis: Kpi[] = [
-  {
-    title: "Total de Tutores",
-    value: "1.248",
-    trend: "+12.4%",
-    direction: "up",
-    icon: Users,
-    color: "teal",
-    iconColor: "teal",
-  },
-  {
-    title: "Animais Cadastrados",
-    value: "1.894",
-    trend: "+8.2%",
-    direction: "up",
-    icon: Dog,
-    color: "orange",
-    iconColor: "teal",
-  },
-  {
-    title: "Consultas Hoje",
-    value: "18",
-    trend: "+5.0%",
-    direction: "up",
-    icon: Activity,
-    color: "orange",
-    iconColor: "orange",
-  },
-  {
-    title: "Vacinas Pendentes",
-    value: "12",
-    trend: "-15.3%",
-    direction: "down",
-    icon: Syringe,
-    color: "orange",
-    iconColor: "orange",
-  },
-];
+function todayISO(): string {
+  const hoje = new Date();
+  const year = hoje.getFullYear();
+  const month = String(hoje.getMonth() + 1).padStart(2, "0");
+  const day = String(hoje.getDate()).padStart(2, "0");
+
+  return `${year}-${month}-${day}`;
+}
 
 const colorStyles = {
   teal: {
@@ -78,14 +53,106 @@ const iconColors = {
 } as const;
 
 export default function CardsPainelGeral() {
+  const [kpis, setKpis] = useState<Kpi[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const controller = new AbortController();
+    let active = true;
+
+    Promise.all([
+      listarTutores(controller.signal),
+      listarAnimais(controller.signal),
+      listarAgendamentos(controller.signal),
+      listarVacinas(undefined, controller.signal),
+    ])
+      .then(([tutores, animais, agendamentos, vacinas]) => {
+        if (!active) return;
+
+        const hoje = todayISO();
+        const consultasHoje = agendamentos.filter(
+          (agendamento) => agendamento.data === hoje,
+        ).length;
+
+        const vacinasPendentes = vacinas.filter(
+          (vacina) => vacina.status !== "Aplicada",
+        ).length;
+
+        setKpis([
+          {
+            title: "Total de Tutores",
+            value: String(tutores.length),
+            subtitle: "cadastrados no sistema",
+            icon: Users,
+            color: "teal",
+            iconColor: "teal",
+          },
+          {
+            title: "Animais Cadastrados",
+            value: String(animais.length),
+            subtitle: "pacientes no sistema",
+            icon: Dog,
+            color: "orange",
+            iconColor: "teal",
+          },
+          {
+            title: "Consultas Hoje",
+            value: String(consultasHoje),
+            subtitle: "agendamentos para hoje",
+            icon: Activity,
+            color: "orange",
+            iconColor: "orange",
+          },
+          {
+            title: "Vacinas Pendentes",
+            value: String(vacinasPendentes),
+            subtitle: "aguardando aplicação",
+            icon: Syringe,
+            color: "orange",
+            iconColor: "orange",
+          },
+        ]);
+        setError(null);
+      })
+      .catch((err: unknown) => {
+        if (!active || (err instanceof Error && err.name === "AbortError")) {
+          return;
+        }
+        setError("Não foi possível carregar os indicadores.");
+      })
+      .finally(() => {
+        if (active) setLoading(false);
+      });
+
+    return () => {
+      active = false;
+      controller.abort();
+    };
+  }, []);
+
+  if (loading) {
+    return (
+      <div className="flex h-38.5 w-full items-center justify-center">
+        <span className="font-inter text-[13px] text-light-gray">
+          Carregando indicadores...
+        </span>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="flex h-38.5 w-full items-center justify-center">
+        <span className="font-inter text-[13px] text-error-red">{error}</span>
+      </div>
+    );
+  }
+
   return (
     <div className="flex w-full flex-col items-start gap-4 sm:flex-row">
       {kpis.map((kpi) => {
         const Icon = kpi.icon;
-        const TrendIcon =
-          kpi.direction === "up" ? ArrowUpRight : ArrowDownRight;
-        const trendColor =
-          kpi.direction === "up" ? "text-success-green" : "text-error-red";
 
         return (
           <div
@@ -113,17 +180,9 @@ export default function CardsPainelGeral() {
                 {kpi.value}
               </span>
 
-              <div className="flex items-center gap-1.5">
-                <TrendIcon size={16} strokeWidth={2} className={trendColor} />
-                <span
-                  className={`font-inter text-[13px] font-bold leading-4 ${trendColor}`}
-                >
-                  {kpi.trend}
-                </span>
-                <span className="font-inter text-[13px] font-normal leading-4 text-light-gray">
-                  desde o mês passado
-                </span>
-              </div>
+              <span className="font-inter text-[13px] font-normal leading-4 text-light-gray">
+                {kpi.subtitle}
+              </span>
             </div>
           </div>
         );

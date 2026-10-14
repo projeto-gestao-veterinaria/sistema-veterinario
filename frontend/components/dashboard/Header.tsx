@@ -61,7 +61,20 @@ const headerContent: Record<string, HeaderContent> = {
     placeholder: "Buscar pacientes, tutores, prontuários...",
   },
 
+  "/prontuarios/novo": {
+    title: "Prontuário Médico",
+    description: "Histórico clínico detalhado de consultas",
+    placeholder: "Buscar pacientes, tutores, prontuários...",
+  },
+
   "/vacinas": {
+    title: "Controle de Vacinas",
+    description:
+      "Imunização, doses aplicadas e agendamentos preventivos do paciente",
+    placeholder: "Buscar vacinas, pacientes...",
+  },
+
+  "/vacinas/novo": {
     title: "Controle de Vacinas",
     description:
       "Imunização, doses aplicadas e agendamentos preventivos do paciente",

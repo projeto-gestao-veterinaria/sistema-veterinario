@@ -7,7 +7,14 @@ import {
 export interface TutorBase {
   nome: string;
   email: string;
-  telefone?: string | null;
+  telefone: string;
+  cpf: string;
+  data_nascimento: string;
+  cep: string;
+  rua: string;
+  bairro: string;
+  cidade: string;
+  estado: string;
 }
 
 export type TutorCreate = TutorBase;
@@ -15,12 +22,18 @@ export type TutorCreate = TutorBase;
 export interface TutorUpdate {
   nome?: string;
   email?: string;
-  telefone?: string | null;
+  telefone?: string;
+  cpf?: string;
+  data_nascimento?: string;
+  cep?: string;
+  rua?: string;
+  bairro?: string;
+  cidade?: string;
+  estado?: string;
 }
 
 export interface TutorResponse extends TutorBase {
   id: number;
-  telefone: string | null;
   animais: AnimalResponse[];
 }
 

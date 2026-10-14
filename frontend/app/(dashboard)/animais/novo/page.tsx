@@ -6,6 +6,8 @@ import { ChevronDown, Loader2, Search, UserPlus } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import type { FormEvent } from "react";
 
+import { criarAnimal } from "@/services/animais";
+
 type Tutor = {
   id: number;
   nome: string;
@@ -46,6 +48,8 @@ export default function NovoAnimal() {
   const [castrado, setCastrado] = useState("");
   const [raca, setRaca] = useState("");
   const [corPelagem, setCorPelagem] = useState("");
+  const [submitting, setSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
 
   const tutorFieldRef = useRef<HTMLDivElement>(null);
 
@@ -144,7 +148,7 @@ export default function NovoAnimal() {
     setTutorListOpen(false);
   }
 
-  function handleSubmit(event: FormEvent<HTMLFormElement>) {
+  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
     if (!selectedTutor) {
@@ -152,7 +156,30 @@ export default function NovoAnimal() {
       return;
     }
 
-    router.push("/animais");
+    setSubmitting(true);
+    setSubmitError(null);
+
+    try {
+      await criarAnimal({
+        nome,
+        especie,
+        raca,
+        data_nascimento: dataNascimento,
+        sexo,
+        castrado,
+        cor_pelagem: corPelagem,
+        tutor_id: selectedTutor.id,
+      });
+
+      router.push("/animais");
+    } catch (error) {
+      setSubmitError(
+        error instanceof Error
+          ? error.message
+          : "Não foi possível cadastrar o animal.",
+      );
+      setSubmitting(false);
+    }
   }
 
   return (
@@ -171,11 +198,22 @@ export default function NovoAnimal() {
 
         <form onSubmit={handleSubmit} className="flex flex-col gap-5">
           <div className="flex flex-col gap-1.5">
-            <label htmlFor="tutor" className={labelClassName}>
-              Nome do Tutor
-            </label>
+            <div className="flex items-center justify-between">
+              <label htmlFor="tutor" className={labelClassName}>
+                Nome do Tutor
+              </label>
 
-            <div ref={tutorFieldRef} className="relative flex gap-2">
+              <Link
+                href="/tutores/novo"
+                aria-label="Adicionar tutor"
+                className="flex items-center gap-1.5 rounded-full border border-teal px-3 py-1 font-inter text-[11px] font-semibold text-teal transition hover:bg-[#F0FDFA]"
+              >
+                <UserPlus size={14} strokeWidth={2} />
+                Adicionar tutor
+              </Link>
+            </div>
+
+            <div ref={tutorFieldRef} className="relative">
               <div className="relative flex-1">
                 <Search
                   size={18}
@@ -257,14 +295,6 @@ export default function NovoAnimal() {
                   </ul>
                 )}
               </div>
-
-              <Link
-                href="/tutores/novo"
-                aria-label="Cadastrar novo tutor"
-                className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl border border-border bg-white text-teal transition hover:bg-[#F0FDFA]"
-              >
-                <UserPlus size={18} strokeWidth={2} />
-              </Link>
             </div>
 
             {selectedTutor && (
@@ -443,6 +473,12 @@ export default function NovoAnimal() {
             />
           </div>
 
+          {submitError && (
+            <span className="font-inter text-[13px] font-medium text-error-red">
+              {submitError}
+            </span>
+          )}
+
           <div className="flex items-center justify-end gap-3 pt-2">
             <Link
               href="/animais"
@@ -453,9 +489,10 @@ export default function NovoAnimal() {
 
             <button
               type="submit"
-              className="flex h-10 cursor-pointer items-center justify-center rounded-xl bg-linear-to-r from-[#0D9487] to-[#1A806B] px-5 font-inter text-small font-medium text-white shadow-[0px_2px_6px_-2px_rgba(13,148,135,0.14902),0px_10px_24px_-8px_rgba(13,148,135,0.2)] transition hover:opacity-90"
+              disabled={submitting}
+              className="flex h-10 cursor-pointer items-center justify-center rounded-xl bg-linear-to-r from-[#0D9487] to-[#1A806B] px-5 font-inter text-small font-medium text-white shadow-[0px_2px_6px_-2px_rgba(13,148,135,0.14902),0px_10px_24px_-8px_rgba(13,148,135,0.2)] transition hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-60"
             >
-              Cadastrar Animal
+              {submitting ? "Cadastrando..." : "Cadastrar Animal"}
             </button>
           </div>
         </form>
